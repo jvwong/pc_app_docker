@@ -1,0 +1,23 @@
+version: '3'
+services:
+  proxy:
+    container_name: proxy
+    image: jvwong/pc_app_proxy:latest
+    ports:
+      - 9090:9090
+    environment:
+      - NGINX_HOST=127.0.0.1
+      - NGINX_PROXY=http://pathway_search:8080
+      - STATIC_ROOT=/webapps/pathway_search/public
+    volumes:
+      - static-volume:/webapps/pathway_search/public
+  pathway_search:
+    container_name: search
+    image: pathwaycommons/pathways-search:integration
+    environment:
+      ENV: DEV
+    volumes:
+      - static-volume:/webapps/pathway_search/public
+
+volumes:
+  static-volume:
